@@ -4,15 +4,67 @@ using UnityEngine;
 
 public class Cannon : MonoBehaviour
 {
-    // Start is called before the first frame update
+	private SpriteRenderer sRenderer;
+	private GameObject Blue;
+	public GameObject Cannonball;
+	private Vector2 cannonballPos;
+	
+	public static float cursorPos = 0f;
+	private float fireDelay;
+	public float fireTime = 0f;
+	
     void Start()
     {
-        
+		sRenderer = GetComponent<SpriteRenderer>();
+		sRenderer.enabled = false;
+		Blue = GameObject.FindWithTag("Blue");
     }
-
-    // Update is called once per frame
+	
     void Update()
     {
-        
+		transform.position = 
+		new Vector2(Blue.transform.position.x, Blue.transform.position.y + 0.75f);
+		
+		// Update whether cannonballs spawn from cannon or center (when Pink's on top)
+		// Update duration of delay in between shots
+		if (PlayerMovement.onTop == "Blue")
+		{
+			sRenderer.enabled = true;
+			cannonballPos = 
+			new Vector2(transform.position.x + (cursorPos / 5f), transform.position.y + 0.2f);
+			fireDelay = 0.5f;
+		}
+		else if (PlayerMovement.onTop != "Blue")
+		{
+			sRenderer.enabled = false;
+			cannonballPos = 
+			new Vector2(transform.position.x, transform.position.y - 0.35f);
+			fireDelay = 0.7f;
+		}
+		
+		// Cursor position (relative to player) and cannon rotation
+		cursorPos = ((Input.mousePosition.x / Screen.width) -
+		(CameraVariables.blueScreenPos / Screen.width)) * 4f;
+		cursorPos = Mathf.Clamp(cursorPos, -1f, 1f);
+		transform.eulerAngles = 
+		new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, 40f * -(cursorPos));
+		
+		// Firing cannon
+		if (((PlayerMovement.onTop == "Blue" && Input.GetMouseButton(0)) ||
+		(PlayerMovement.onTop == "Pink" && Input.GetKey(KeyCode.Space)))
+		&& fireTime <= 0f)
+		{
+			fireTime = fireDelay;
+			Instantiate(Cannonball, cannonballPos, Quaternion.identity);
+		}
     }
+	
+	void FixedUpdate()
+	{
+		fireTime -= Time.fixedDeltaTime;
+		if (fireTime <= 0f)
+		{
+			fireTime = 0f;
+		}
+	}
 }

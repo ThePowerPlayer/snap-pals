@@ -27,7 +27,6 @@ public class ConnectorTrigger : MonoBehaviour
 			{
 				PlayerMovement.onTop = "Blue";
 			}
-			Debug.Log("On top: " + PlayerMovement.onTop);
 			audioSource.PlayOneShot(snap);
 		}
 	}

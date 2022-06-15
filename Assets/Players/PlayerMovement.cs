@@ -17,6 +17,9 @@ public class PlayerMovement : MonoBehaviour
 	private float friction = 0.5f;
 	
 	public static string onTop;
+	public static bool facingRight;
+	
+	public GameObject Cannon;
 	
 	[SerializeField] private LayerMask jumpableGround;
 	
@@ -48,16 +51,19 @@ public class PlayerMovement : MonoBehaviour
 		if (gameObject.name == "Blue" || gameObject.name == "Blue(Clone)")
 		{
 			gameObject.tag = "Blue";
-			LeftKey = KeyCode.A;
-			RightKey = KeyCode.D;
-			JumpKey = KeyCode.W;
+			LeftKey = KeyCode.LeftArrow;
+			RightKey = KeyCode.RightArrow;
+			JumpKey = KeyCode.UpArrow;
+			Instantiate(Cannon,
+			new Vector3(transform.position.x, transform.position.y + 0.75f,
+			transform.position.z), Quaternion.identity);
 		}
 		if (gameObject.name == "Pink" || gameObject.name == "Pink(Clone)")
 		{
 			gameObject.tag = "Pink";
-			LeftKey = KeyCode.LeftArrow;
-			RightKey = KeyCode.RightArrow;
-			JumpKey = KeyCode.UpArrow;
+			LeftKey = KeyCode.A;
+			RightKey = KeyCode.D;
+			JumpKey = KeyCode.W;
 		}
 		
 		onTop = "None";
@@ -69,10 +75,12 @@ public class PlayerMovement : MonoBehaviour
         if (Input.GetKey(LeftKey) && gameObject.tag != onTop)
 		{
 			XVelocityAdd(-(speed));
+			facingRight = false;
 		}
 		if (Input.GetKey(RightKey) && gameObject.tag != onTop)
 		{
 			XVelocityAdd(speed);
+			facingRight = true;
 		}
 		
 		// Jumping
@@ -91,7 +99,6 @@ public class PlayerMovement : MonoBehaviour
 			}
 			else if (gameObject.tag == onTop)
 			{
-				Debug.Log("Jumped out of the connection!");
 				onTop = "None";
 				YVelocitySetTo(jumpHeight);
 			}

@@ -120,6 +120,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55dbd1f3003a49d44b92a041bbabc72e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Cannon: {fileID: 5650594092100088701, guid: 68a6decb0a1d6c34b89920cb77464643, type: 3}
   jumpableGround:
     serializedVersion: 2
     m_Bits: 8

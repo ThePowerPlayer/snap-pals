@@ -11,7 +11,7 @@ public class Cannon : MonoBehaviour
 	
 	public static float cursorPos = 0f;
 	private float fireDelay;
-	public float fireTime = 0f;
+	private float fireTime = 0f;
 	
     void Start()
     {
@@ -32,14 +32,14 @@ public class Cannon : MonoBehaviour
 			sRenderer.enabled = true;
 			cannonballPos = 
 			new Vector2(transform.position.x + (cursorPos / 5f), transform.position.y + 0.2f);
-			fireDelay = 0.5f;
+			fireDelay = 0.4f;
 		}
 		else if (PlayerMovement.onTop != "Blue")
 		{
 			sRenderer.enabled = false;
 			cannonballPos = 
 			new Vector2(transform.position.x, transform.position.y - 0.35f);
-			fireDelay = 0.7f;
+			fireDelay = 0.6f;
 		}
 		
 		// Cursor position (relative to player) and cannon rotation

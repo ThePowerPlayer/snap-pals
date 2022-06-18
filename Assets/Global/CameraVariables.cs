@@ -17,5 +17,11 @@ public class CameraVariables : MonoBehaviour
     void Update()
     {
         blueScreenPos = cam.WorldToScreenPoint(Blue.transform.position).x;
+		
+		// Game over!
+		if (GlobalVariables.lives <= 0)
+		{
+			Destroy(this);
+		}
     }
 }

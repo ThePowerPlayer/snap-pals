@@ -145,6 +145,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e446873131a39724cb474ee76e863989, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ControlPopup: {fileID: 5187042614384224677, guid: e26e862a208d90843ac43286c2f41d35, type: 3}
 --- !u!82 &4092330012416026165
 AudioSource:
   m_ObjectHideFlags: 0

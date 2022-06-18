@@ -6,6 +6,7 @@ public class PlayerMovement : MonoBehaviour
 {
     private Rigidbody2D rb;
 	private PolygonCollider2D coll;
+	private SpriteRenderer sRenderer;
 	
 	private KeyCode LeftKey;
 	private KeyCode RightKey;
@@ -18,6 +19,7 @@ public class PlayerMovement : MonoBehaviour
 	
 	public static string onTop;
 	public static bool facingRight;
+	public static bool hurt;
 	
 	public GameObject Cannon;
 	
@@ -47,6 +49,7 @@ public class PlayerMovement : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
 		coll = GetComponent<PolygonCollider2D>();
+		sRenderer = GetComponent<SpriteRenderer>();
 		
 		if (gameObject.name == "Blue" || gameObject.name == "Blue(Clone)")
 		{
@@ -67,6 +70,7 @@ public class PlayerMovement : MonoBehaviour
 		}
 		
 		onTop = "None";
+		hurt = false;
     }
 
     void Update()
@@ -140,7 +144,6 @@ public class PlayerMovement : MonoBehaviour
 		YVelocitySetTo(Mathf.Clamp(rb.velocity.y, -(jumpHeight), jumpHeight));
 		
 		// Make the player on top stick to the one on the bottom
-		
 		if (gameObject.tag == onTop)
 		{
 			if (gameObject.tag == "Blue")
@@ -157,5 +160,24 @@ public class PlayerMovement : MonoBehaviour
 			}
 		}
 		
+		// Game over!
+		if (GlobalVariables.lives <= 0)
+		{
+			Destroy(gameObject);
+		}
     }
+	
+	void FixedUpdate()
+	{
+		// Slightly fade sprite during invincibility
+		sRenderer.color = new Color(1, 1, 1, GlobalVariables.invincibilityFade);
+	}
+	
+	void OnTriggerEnter2D(Collider2D col)
+	{
+		if (col.gameObject.tag == "Enemy" && GlobalVariables.invincibilityFrames == 0f)
+		{
+			hurt = true;
+		}
+	}
 }

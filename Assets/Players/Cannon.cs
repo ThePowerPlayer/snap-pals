@@ -5,6 +5,8 @@ using UnityEngine;
 public class Cannon : MonoBehaviour
 {
 	private SpriteRenderer sRenderer;
+	private Color fade;
+	
 	private GameObject Blue;
 	public GameObject Cannonball;
 	private Vector2 cannonballPos;
@@ -17,6 +19,7 @@ public class Cannon : MonoBehaviour
     {
 		sRenderer = GetComponent<SpriteRenderer>();
 		sRenderer.enabled = false;
+		fade = sRenderer.color;
 		Blue = GameObject.FindWithTag("Blue");
     }
 	
@@ -57,6 +60,12 @@ public class Cannon : MonoBehaviour
 			fireTime = fireDelay;
 			Instantiate(Cannonball, cannonballPos, Quaternion.identity);
 		}
+		
+		// Game over!
+		if (GlobalVariables.lives <= 0)
+		{
+			Destroy(gameObject);
+		}
     }
 	
 	void FixedUpdate()
@@ -66,5 +75,9 @@ public class Cannon : MonoBehaviour
 		{
 			fireTime = 0f;
 		}
+		
+		// Slightly fade sprite during invincibility
+		fade.a = GlobalVariables.invincibilityFade;
+		sRenderer.color = fade;
 	}
 }

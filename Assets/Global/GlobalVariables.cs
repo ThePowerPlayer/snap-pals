@@ -16,16 +16,30 @@ public class GlobalVariables : MonoBehaviour
 	public static float invincibilityFade;
 	private float invincibilityFadeChange;
 	
+	public static bool gameStart;
+	
+	private AudioSource audioSource;
+	
     void Start()
     {
         score = 0;
 		scoreText = GetComponent<Text>();
 		lives = 3;
+		gameStart = false;
+		audioSource = GetComponent<AudioSource>();
     }
 	
 	void Update()
 	{
-		scoreText.text = score.ToString();
+		if ((Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0)) &&
+		gameStart == false)
+		{
+			gameStart = true;
+		}
+		if (gameStart == true)
+		{
+			scoreText.text = score.ToString();
+		}
 	}
 	
 	void FixedUpdate()
@@ -36,6 +50,10 @@ public class GlobalVariables : MonoBehaviour
 		{
 			PlayerMovement.hurt = false;
 			lives -= 1;
+			if (lives == 0)
+			{
+				audioSource.Play();
+			}
 			invincibilityFrames = invincibilityDuration;
 		}
 		

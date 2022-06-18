@@ -120,6 +120,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55dbd1f3003a49d44b92a041bbabc72e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  BlueStandard: {fileID: 21300000, guid: 51fa617b65a37a94e9559b24ece68893, type: 3}
+  BlueOnBottom: {fileID: 21300000, guid: 00a243037fb65c24ea6655f594cbf35f, type: 3}
+  Cannon: {fileID: 5650594092100088701, guid: 68a6decb0a1d6c34b89920cb77464643, type: 3}
+  DeathParticle: {fileID: 5589147724855951648, guid: f8db648ba28cded448f9e7674a232a57, type: 3}
   jumpableGround:
     serializedVersion: 2
     m_Bits: 8
@@ -195,7 +199,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 0}
+  m_audioClip: {fileID: 8300000, guid: f5f009119e1b0f940b4ce06b6158e68b, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1

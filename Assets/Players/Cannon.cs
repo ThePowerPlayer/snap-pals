@@ -15,12 +15,15 @@ public class Cannon : MonoBehaviour
 	private float fireDelay;
 	private float fireTime = 0f;
 	
+	private AudioSource audioSource;
+	
     void Start()
     {
 		sRenderer = GetComponent<SpriteRenderer>();
 		sRenderer.enabled = false;
 		fade = sRenderer.color;
 		Blue = GameObject.FindWithTag("Blue");
+		audioSource = GetComponent<AudioSource>();
     }
 	
     void Update()
@@ -57,6 +60,8 @@ public class Cannon : MonoBehaviour
 		(PlayerMovement.onTop == "Pink" && Input.GetKey(KeyCode.Space)))
 		&& fireTime <= 0f)
 		{
+			audioSource.pitch = Random.Range(0.8f, 1.2f);
+			audioSource.Play();
 			fireTime = fireDelay;
 			Instantiate(Cannonball, cannonballPos, Quaternion.identity);
 		}

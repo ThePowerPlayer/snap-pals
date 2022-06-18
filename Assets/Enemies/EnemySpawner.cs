@@ -7,10 +7,11 @@ public class EnemySpawner : MonoBehaviour
 	public GameObject Enemy;
 	private GameObject[] Enemies;
 	private float[] spawnPosXArray = new float[] {-9.9f, 9.9f};
-	private float[] spawnPosYArray = new float[] {-3.5f, -3.5f, -3.5f, 1f, 2f, 3f, 4f};
+	private float[] spawnPosYArray = new float[] {-3.5f, -3.5f, -3.5f, 1f, 2f, 2f, 3f};
 	private Vector2 spawnPos = new Vector2(0f, 0f);
-	private float spawnDelay = 5f;
-	private float spawnTimer = 5f;
+	private float spawnDelay = 4f;
+	private float spawnTimer = 4f;
+	private float gameStartDelay = 5f;
 	
 	void Update()
 	{
@@ -22,23 +23,34 @@ public class EnemySpawner : MonoBehaviour
 	
     void FixedUpdate()
     {
-		spawnTimer -= Time.fixedDeltaTime;
-		
-		Enemies = GameObject.FindGameObjectsWithTag("Enemy");
-		if (Enemies.Length == 0)
+		if (GlobalVariables.gameStart == true)
 		{
-			spawnTimer = 0f;
+			gameStartDelay -= Time.fixedDeltaTime;
+			if (gameStartDelay <= 0f)
+			{
+				gameStartDelay = 0f;
+			}
 		}
-		
-		if (spawnTimer <= 0f)
+		if (GlobalVariables.gameStart == true && gameStartDelay <= 0f)
 		{
-			spawnTimer = spawnDelay;
-			spawnDelay -= 0.08f;
+			spawnTimer -= Time.fixedDeltaTime;
 			
-			spawnPos = new Vector2(spawnPosXArray[Random.Range(0, spawnPosXArray.Length)],
-			spawnPosYArray[Random.Range(0, spawnPosYArray.Length)]);
-			Instantiate(Enemy, spawnPos, Quaternion.identity);
+			Enemies = GameObject.FindGameObjectsWithTag("Enemy");
+			if (Enemies.Length == 0)
+			{
+				spawnTimer = 0f;
+			}
+			
+			if (spawnTimer <= 0f)
+			{
+				spawnTimer = spawnDelay;
+				spawnDelay -= 0.12f;
+				
+				spawnPos = new Vector2(spawnPosXArray[Random.Range(0, spawnPosXArray.Length)],
+				spawnPosYArray[Random.Range(0, spawnPosYArray.Length)]);
+				Instantiate(Enemy, spawnPos, Quaternion.identity);
+			}
+			spawnDelay = Mathf.Clamp(spawnDelay, 2f, 4f);
 		}
-		spawnDelay = Mathf.Clamp(spawnDelay, 2f, 5f);
     }
 }

@@ -7,6 +7,7 @@ TagManager:
   - Blue
   - Pink
   - Enemy
+  - MusicPlayer
   layers:
   - Default
   - TransparentFX
@@ -39,7 +40,7 @@ TagManager:
   - 
   - 
   - 
-  - 
+  - Light2D
   m_SortingLayers:
   - name: Default
     uniqueID: 0

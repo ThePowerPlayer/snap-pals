@@ -6,16 +6,35 @@ public class Enemy : MonoBehaviour
 {
 	private Rigidbody2D rb;
 	private BoxCollider2D coll;
+	
+	private SpriteRenderer sRenderer;
+	private Color Grounded = new Color(1f, 0.25f, 0.25f, 1f);
+	private Color Flying = new Color(1f, 0.5f, 0.5f, 1f);
+	
 	private Vector3 movement = new Vector3(0f, 0f, 0f);
 	private float speed = 1f;
+	
 	private bool dead = false;
 	private float[] fallDirecs = new float[] {-1f, 1f};
 	private float fallDirec;
+	
+	private AudioSource audioSource;
 	
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
 		coll = GetComponent<BoxCollider2D>();
+		
+		sRenderer = GetComponent<SpriteRenderer>();
+		if (transform.position.y <= -3.5f)
+		{
+			sRenderer.color = Grounded;
+		}
+		else if (transform.position.y > -3.5f)
+		{
+			sRenderer.color = Flying;
+		}
+		
 		if (transform.position.x < 0f)
 		{
 			movement = new Vector3(1f, 0f, 0f);
@@ -24,6 +43,8 @@ public class Enemy : MonoBehaviour
 		{
 			movement = new Vector3(-1f, 0f, 0f);
 		}
+		
+		audioSource = GetComponent<AudioSource>();
     }
 	
 	void Update()
@@ -65,10 +86,15 @@ public class Enemy : MonoBehaviour
 	{
 		if (col.gameObject.tag != "Blue" && col.gameObject.tag != "Pink")
 		{
+			audioSource.pitch = Random.Range(0.8f, 1.2f);
+			audioSource.Play();
 			GlobalVariables.score += 1;
 		}
 		dead = true;
-		coll.enabled = false;
+		if (gameObject)
+		{
+			coll.enabled = false;
+		}
 		fallDirec = fallDirecs[Random.Range(0, fallDirecs.Length)];
 		rb.bodyType = RigidbodyType2D.Dynamic;
 		rb.gravityScale = 4f;

@@ -8,6 +8,9 @@ public class PlayerMovement : MonoBehaviour
 	private PolygonCollider2D coll;
 	private SpriteRenderer sRenderer;
 	
+	public Sprite BlueStandard;
+	public Sprite BlueOnBottom;
+	
 	private KeyCode LeftKey;
 	private KeyCode RightKey;
 	private KeyCode JumpKey;
@@ -22,6 +25,9 @@ public class PlayerMovement : MonoBehaviour
 	public static bool hurt;
 	
 	public GameObject Cannon;
+	public GameObject DeathParticle;
+	
+	private AudioSource audioSource;
 	
 	[SerializeField] private LayerMask jumpableGround;
 	
@@ -48,8 +54,10 @@ public class PlayerMovement : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+		rb.constraints = RigidbodyConstraints2D.FreezeAll;
 		coll = GetComponent<PolygonCollider2D>();
 		sRenderer = GetComponent<SpriteRenderer>();
+		audioSource = GetComponent<AudioSource>();
 		
 		if (gameObject.name == "Blue" || gameObject.name == "Blue(Clone)")
 		{
@@ -75,6 +83,25 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
+		// Start game
+		if (GlobalVariables.gameStart == true)
+		{
+			rb.constraints = RigidbodyConstraints2D.FreezeRotation;
+		}
+		
+		// Change Blue sprite
+		if (gameObject.tag == "Blue")
+		{
+			if (onTop == "Pink")
+			{
+				sRenderer.sprite = BlueOnBottom;
+			}
+			else if (onTop != "Pink")
+			{
+				sRenderer.sprite = BlueStandard;
+			}
+		}
+		
 		// Left and right movement
         if (Input.GetKey(LeftKey) && gameObject.tag != onTop)
 		{
@@ -163,6 +190,10 @@ public class PlayerMovement : MonoBehaviour
 		// Game over!
 		if (GlobalVariables.lives <= 0)
 		{
+			for (int i = 0; i < 15; i++)
+			{
+				Instantiate(DeathParticle, transform.position, Quaternion.identity);
+			}
 			Destroy(gameObject);
 		}
     }
@@ -177,6 +208,10 @@ public class PlayerMovement : MonoBehaviour
 	{
 		if (col.gameObject.tag == "Enemy" && GlobalVariables.invincibilityFrames == 0f)
 		{
+			if (GlobalVariables.lives >= 2)
+			{
+				audioSource.Play();
+			}
 			hurt = true;
 		}
 	}

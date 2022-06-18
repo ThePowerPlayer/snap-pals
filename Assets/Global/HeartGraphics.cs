@@ -4,9 +4,11 @@ using UnityEngine;
 
 public class HeartGraphics : MonoBehaviour
 {
+	public Sprite StartText;
 	public Sprite Heart1;
 	public Sprite Heart2;
 	public Sprite Heart3;
+	public Sprite Restart;
 	private SpriteRenderer sRenderer;
 	
     void Start()
@@ -16,24 +18,28 @@ public class HeartGraphics : MonoBehaviour
 	
     void Update()
     {
-		if (GlobalVariables.lives <= 0)
+		if (GlobalVariables.gameStart == false)
 		{
-			sRenderer.enabled = false;
+			sRenderer.sprite = StartText;
 		}
-		else if (GlobalVariables.lives == 1)
+		else if (GlobalVariables.gameStart == true)
 		{
-			sRenderer.enabled = true;
-			sRenderer.sprite = Heart1;
-		}
-		else if (GlobalVariables.lives == 2)
-		{
-			sRenderer.enabled = true;
-			sRenderer.sprite = Heart2;
-		}
-        else if (GlobalVariables.lives == 3)
-		{
-			sRenderer.enabled = true;
-			sRenderer.sprite = Heart3;
+			if (GlobalVariables.lives <= 0)
+			{
+				sRenderer.sprite = Restart;
+			}
+			else if (GlobalVariables.lives == 1)
+			{
+				sRenderer.sprite = Heart1;
+			}
+			else if (GlobalVariables.lives == 2)
+			{
+				sRenderer.sprite = Heart2;
+			}
+			else if (GlobalVariables.lives == 3)
+			{
+				sRenderer.sprite = Heart3;
+			}
 		}
     }
 }

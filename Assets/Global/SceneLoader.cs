@@ -15,7 +15,7 @@ public class SceneLoader : MonoBehaviour
 	
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.R))
+        if (Input.GetKeyDown(KeyCode.R) && GlobalVariables.lives > 0)
 		{
 			StartCoroutine(LoadLevel());
 		}

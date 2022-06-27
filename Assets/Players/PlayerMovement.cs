@@ -17,7 +17,7 @@ public class PlayerMovement : MonoBehaviour
 	
 	private const float speed = 1f;
 	private const float topSpeed = 10f;
-	private const float jumpHeight = 25f;
+	private const float jumpHeight = 22f;
 	private float friction = 0.5f;
 	
 	public static string onTop;
@@ -117,22 +117,19 @@ public class PlayerMovement : MonoBehaviour
 		// Jumping
 		if (Input.GetKeyDown(JumpKey))
 		{
-			if (onTop == "None")
+			if (onTop == "None" && IsGrounded())
 			{
-				if (IsGrounded())
-				{
-					YVelocitySetTo(jumpHeight);
-				}
-				else if (!IsGrounded())
-				{
-					YVelocitySetTo(rb.velocity.y / 2);
-				}
+				YVelocitySetTo(jumpHeight);
 			}
 			else if (gameObject.tag == onTop)
 			{
 				onTop = "None";
 				YVelocitySetTo(jumpHeight);
 			}
+		}
+		if (Input.GetKeyUp(JumpKey) && !IsGrounded())
+		{
+			YVelocitySetTo(rb.velocity.y / 2);
 		}
 		
 		// Generate artificial horizontal friction if not moving left or right

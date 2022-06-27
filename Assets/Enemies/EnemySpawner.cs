@@ -7,7 +7,7 @@ public class EnemySpawner : MonoBehaviour
 	public GameObject Enemy;
 	private GameObject[] Enemies;
 	private float[] spawnPosXArray = new float[] {-9.9f, 9.9f};
-	private float[] spawnPosYArray = new float[] {-3.5f, -3.5f, -3.5f, 1f, 2f, 2f, 3f};
+	private float[] spawnPosYArray = new float[] {-3.51f, -3.51f, -3.51f, 1f, 2f, 2f, 3f};
 	private Vector2 spawnPos = new Vector2(0f, 0f);
 	private float spawnDelay = 4f;
 	private float spawnTimer = 4f;

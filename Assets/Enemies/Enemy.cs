@@ -10,6 +10,7 @@ public class Enemy : MonoBehaviour
 	private SpriteRenderer sRenderer;
 	private Color Grounded = new Color(1f, 0.25f, 0.25f, 1f);
 	private Color Flying = new Color(1f, 0.5f, 0.5f, 1f);
+	private Color Swooping = new Color(1f, 1f, 0.5f, 1f);
 	
 	private Vector3 movement = new Vector3(0f, 0f, 0f);
 	private float speed = 1f;
@@ -18,21 +19,43 @@ public class Enemy : MonoBehaviour
 	private float[] fallDirecs = new float[] {-1f, 1f};
 	private float fallDirec;
 	
+	private int swoopChance;
+	private float swoopTimer;
+	private float swoopSpeed = 0f;
+	
 	private AudioSource audioSource;
+	
+	private void Die()
+	{
+		dead = true;
+		if (GetComponent<BoxCollider2D>() != null) coll.enabled = false;
+		fallDirec = fallDirecs[Random.Range(0, fallDirecs.Length)];
+		rb.bodyType = RigidbodyType2D.Dynamic;
+		rb.gravityScale = 4f;
+	}
 	
     void Start()
     {
-        rb = GetComponent<Rigidbody2D>();
-		coll = GetComponent<BoxCollider2D>();
+        if (GetComponent<Rigidbody2D>() != null) rb = GetComponent<Rigidbody2D>();
+		if (GetComponent<BoxCollider2D>() != null) coll = GetComponent<BoxCollider2D>();
+		if (GetComponent<SpriteRenderer>() != null) sRenderer = GetComponent<SpriteRenderer>();
 		
-		sRenderer = GetComponent<SpriteRenderer>();
 		if (transform.position.y <= -3.5f)
 		{
 			sRenderer.color = Grounded;
 		}
 		else if (transform.position.y > -3.5f)
 		{
-			sRenderer.color = Flying;
+			swoopChance = Random.Range(1, 101);
+			if (swoopChance <= 40)
+			{
+				sRenderer.color = Swooping;
+				swoopTimer = Random.Range(5f, 8f);
+			}
+			else if (swoopChance > 40)
+			{
+				sRenderer.color = Flying;
+			}
 		}
 		
 		if (transform.position.x < 0f)
@@ -49,13 +72,9 @@ public class Enemy : MonoBehaviour
 	
 	void Update()
 	{
-		if (GlobalVariables.lives <= 0)
+		if (GlobalVariables.lives <= 0 && !dead)
 		{
-			dead = true;
-			coll.enabled = false;
-			fallDirec = fallDirecs[Random.Range(0, fallDirecs.Length)];
-			rb.bodyType = RigidbodyType2D.Dynamic;
-			rb.gravityScale = 4f;
+			Die();
 		}
 		
 		// Out of bounds
@@ -72,6 +91,24 @@ public class Enemy : MonoBehaviour
     {
 		if (!dead)
 		{
+			if (sRenderer.color == Swooping)
+			{
+				swoopTimer -= Time.fixedDeltaTime;
+				if (swoopTimer <= 0f)
+				{
+					swoopTimer = 0f;
+					if (transform.position.y > -2f)
+					{
+						swoopSpeed += (Time.fixedDeltaTime / 3);
+					}
+					else if (transform.position.y <= -2f)
+					{
+						swoopSpeed = 0f;
+					}
+					swoopSpeed = Mathf.Clamp(swoopSpeed, 0f, 1f);
+					movement[1] = -(swoopSpeed);
+				}
+			}
 			rb.MovePosition(transform.position + movement * speed * Time.fixedDeltaTime);
 		}
 		else if (dead)
@@ -90,13 +127,9 @@ public class Enemy : MonoBehaviour
 			audioSource.Play();
 			GlobalVariables.score += 1;
 		}
-		dead = true;
-		if (gameObject)
+		if (!dead)
 		{
-			coll.enabled = false;
+			Die();
 		}
-		fallDirec = fallDirecs[Random.Range(0, fallDirecs.Length)];
-		rb.bodyType = RigidbodyType2D.Dynamic;
-		rb.gravityScale = 4f;
 	}
 }

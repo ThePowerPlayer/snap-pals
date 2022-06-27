@@ -2,6 +2,9 @@
 My submission for the [1st Lost Relic Games Game Jam](https://itch.io/jam/lost-relic-games-1) (Theme: **Connection**)!
 
 Play as Blue and Pink and work together to defend yourself from the incoming horde of squares!
+## Version 1.1.0 released!
+- **Light yellow squares** will now appear, which can swoop down towards the ground. Be wary of putting Pink on top for too long...
+- **Variable jump height**: each player now jumps depending on how long they hold their respective jump button!
 ## Instructions
 - Use the **arrow keys** to control Blue.
 - Use **WASD** to control Pink.
